@@ -1,0 +1,120 @@
+<div class="offset-md-2 col-md-8">
+  <div class="card">
+    <div class="card-header">
+      <h1 style="text-align: center; color: white;"><strong>{{ title }}</strong></h1>
+    </div>
+    <div class="card-body">
+      <form #f="ngForm" [formGroup]="form" (ngSubmit)="save()">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="id_beneficiaire"><strong>Id Beneficiaire</strong></label>
+              <input formControlName="id_beneficiaire" name="id_beneficiaire" [(ngModel)]="compte.id_beneficiaire"
+                id="beneficiaire" type="text" class="form-control"/>
+              <div *ngIf="form.get('id_beneficiaire').touched && form.get('id_beneficiaire').invalid"
+                class="alert alert-danger">
+                <div *ngIf="form.get('id_beneficiaire').errors.required">
+                  Le champ beneficiaire est obligatoire
+                </div>
+                <div *ngIf="form.get('id_beneficiaire').errors.pattern">
+                  Ce champ doit etre numerique
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="offset-md-1 col-md-7">
+            <div class="form-group">
+              <label for="username"><strong>Nom d'utilisateur</strong></label>
+              <input formControlName="username" name="username" [(ngModel)]="compte.username" id="username" type="text"
+                class="form-control"/>
+              <div *ngIf="form.get('username').touched && form.get('username').invalid" class="alert alert-danger">
+                <div *ngIf="form.get('username').errors.required">
+                  Le champ username est obligatoire.
+                </div>
+                <div *ngIf="form.get('username').errors.minlength">
+                  Ce champ doit avoir au moins {{ form.get('username').errors.minlength.requiredLength }} characteres.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username"><strong>Prénom</strong></label>
+          <input formControlName="firstname" name="firstname" [(ngModel)]="compte.firstname" id="firstname"
+            class="form-control"/>
+          <div *ngIf="form.get('firstname').touched && form.get('firstname').invalid" class="alert alert-danger">
+            Le champ prenom est obligatoire
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastname"><strong>Nom</strong></label>
+          <input formControlName="lastname" name="lastname" [(ngModel)]="compte.lastname" id="lastname"
+            class="form-control"/>
+          <div *ngIf="form.get('lastname').touched && form.get('lastname').invalid" class="alert alert-danger">
+            Le champ nom est obligatoire
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="role"><strong>Role</strong></label>
+              <select formControlName="role" name="role" [(ngModel)]="compte.role" id="role" class="form-control">
+                <option value=""></option>
+                <option *ngFor="let r of roles" [value]="r.Id">
+                  {{ r.description }}
+                </option>
+              </select>
+              <div *ngIf="form.get('role').touched && form.get('role').invalid" class="alert alert-danger">
+                Le champ role est obligatoire
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="unite"><strong>Unité</strong></label>
+              <select formControlName="unite" name="unite" [(ngModel)]="compte.unite" (change)="getUnite($event)"
+                id="unite" class="form-control">
+                <option value=""></option>
+                <option *ngFor="let u of unites" [value]="u.Id">
+                  {{ u.name }}
+                </option>
+              </select>
+              <div *ngIf="form.get('unite').touched && form.get('unite').invalid" class="alert alert-danger">
+                Le champ unite est obligatoire
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="forme_par"><strong>Formé par</strong></label>
+          <input formControlName="forme_par" name="forme_par" [(ngModel)]="compte.forme_par" id="forme_par"
+            class="form-control" />
+          <div *ngIf="form.get('forme_par').touched && form.get('forme_par').invalid" class="alert alert-danger">
+            Ce champ est obligatoire
+          </div>
+        </div>
+
+        <div class="form-group" S>
+          <label for="status"><strong>Statut</strong></label>
+          <select formControlName="status" name="status" [(ngModel)]="compte.status" id="status" class="form-control"
+            required>
+            <option value=""></option>
+            <option *ngFor="let s of statuts" [value]="s.Id">
+              {{ s.name }}
+            </option>
+          </select>
+
+        </div>
+
+        <button class="btn btn-primary"><strong>Sauvegarder</strong></button>
+      </form>
+    </div>
+
+  </div>
+</div>

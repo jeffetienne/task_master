@@ -1,0 +1,11 @@
+.card {
+    margin-top: 70px;
+}
+
+.card-header {
+    background-color: dodgerblue;
+}
+
+.card-body {
+    background-color: rgb(250, 250, 250);
+}

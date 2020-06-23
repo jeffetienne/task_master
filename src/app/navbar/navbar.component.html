@@ -1,0 +1,125 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <a class="navbar-brand" routerLink="">Task Master</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <ng-template #anonymousUser>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/signUp">Sign Up</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login">Login</a>
+        </li>
+      </ng-template>
+      
+      
+      <li ngbDropdown class="nav-item dropdown show">
+        <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          
+        </a>
+        <div ngbDropdownMenu class="dropdown-menu show" aria-labelledby="dropdown01">
+          <ng-container>
+            <!--
+            <a class="dropdown-item" routerLink="/domaine">
+              Domaines
+              <span class="badge badge-warning badge-pill">
+                
+              </span>
+            </a>-->                
+            <a class="dropdown-item" routerLink="/compte/list">
+              Demandes de creation de Compte
+              <span class="badge badge-warning badge-pill">
+                
+              </span>
+            </a>
+          </ng-container>           
+          <a class="dropdown-item" routerLink="/formulaires">
+            Demandes d'ajout de module
+            <span class="badge badge-warning badge-pill">
+              
+            </span>
+          </a>
+          <a class="dropdown-item" routerLink="/formulaires">
+            Demandes de modification de module
+            <span class="badge badge-warning badge-pill">
+              
+            </span>
+          </a>
+          <a class="dropdown-item" routerLink="/formulaires">
+            Demandes de modification de dossier
+            <span class="badge badge-warning badge-pill">
+              
+            </span>
+          </a>
+          <a class="dropdown-item" routerLink="/formulaires">
+            Plaintes
+            <span class="badge badge-warning badge-pill">
+              
+            </span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="logout()">Log Out</a>
+        </div>
+      </li>
+
+      <li ngbDropdown class="nav-item dropdown show">
+        <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Faire une Demande
+        </a>
+        <div ngbDropdownMenu class="dropdown-menu show" aria-labelledby="dropdown01">
+          <ng-container>
+            <!--
+            <a class="dropdown-item" routerLink="/domaine">
+              Domaines
+              <span class="badge badge-warning badge-pill">
+                
+              </span>
+            </a>-->                
+            <a class="dropdown-item" routerLink="/compte/create">
+              Pour creer un Compte
+              <span class="badge badge-warning badge-pill">
+                
+              </span>
+            </a>
+          </ng-container>           
+          <a class="dropdown-item" routerLink="/formulaires">
+            Pour Ajouter un module
+            <span class="badge badge-warning badge-pill">
+              
+            </span>
+          </a>
+          <a class="dropdown-item" routerLink="/formulaires">
+            Pour modifier un module
+            <span class="badge badge-warning badge-pill">
+              
+            </span>
+          </a>
+          <a class="dropdown-item" routerLink="/formulaires">
+            Pour modifier un dossier
+            <span class="badge badge-warning badge-pill">
+              
+            </span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" routerLink="/formulaires">
+            Plainte
+            <span class="badge badge-warning badge-pill">
+              
+            </span>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main role="main" class="container">
+
+
+</main>
