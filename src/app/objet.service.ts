@@ -5,16 +5,17 @@ import { Constants } from './constants/constant';
 @Injectable({
   providedIn: 'root'
 })
-export class StatusService {
+export class ObjetService {
 
-  url = '/api/status';
-  constructor(private http:Http) { }
+  url = '/api/objets/';
 
-  getStatus(){
+  constructor(private http: Http) { }
+
+  getObjets(){
     return this.http.get(Constants.server + ':' + Constants.port + this.url);
   }
-
-  getStatusById(code: string){
-    return this.http.get(Constants.server + ':' + Constants.port + this.url + '/' + code);
+  
+  getObjetByName(name: string){
+    return this.http.get(Constants.server + ':' + Constants.port + this.url + name);
   }
 }

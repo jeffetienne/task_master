@@ -14,7 +14,7 @@ export class RoleService {
     return this.http.get(Constants.server + ':' + Constants.port + this.url);
   }
 
-  getRole(id: number){
-    return this.http.get(Constants.server + ':' + Constants.port + this.url + '/' + id);
+  getRole(name: string){
+    return this.http.get(Constants.server + ':' + Constants.port + this.url + '/' + name);
   }
 }

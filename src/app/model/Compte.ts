@@ -10,13 +10,13 @@ export class Compte{
     username: string;
     firstname: string;
     lastname: string;
-    role_ref: Role;
-    role: number;
-    unite_ref: Unite;
-    unite: number;
+    Role: Role;
+    role: string;
+    Unite: Unite;
+    unite: string;
     forme_par: number;
-    status_ref: Status;
-    status: number;
+    Status: Status;
+    status: string;
     status_date: Date;
     status_by: number;
     status_reason: string;
@@ -24,4 +24,8 @@ export class Compte{
     cree_le: Date;
     modifie_par: string;
     modifie_le: Date;
+    supprime: number;
+    supprime_par: string;
+    supprime_le: Date;
+    supprime_raison: string;
 }

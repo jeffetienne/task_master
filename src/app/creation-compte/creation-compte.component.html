@@ -10,7 +10,7 @@
             <div class="form-group">
               <label for="id_beneficiaire"><strong>Id Beneficiaire</strong></label>
               <input formControlName="id_beneficiaire" name="id_beneficiaire" [(ngModel)]="compte.id_beneficiaire"
-                id="beneficiaire" type="text" class="form-control"/>
+                id="beneficiaire" type="text" class="form-control" />
               <div *ngIf="form.get('id_beneficiaire').touched && form.get('id_beneficiaire').invalid"
                 class="alert alert-danger">
                 <div *ngIf="form.get('id_beneficiaire').errors.required">
@@ -19,6 +19,9 @@
                 <div *ngIf="form.get('id_beneficiaire').errors.pattern">
                   Ce champ doit etre numerique
                 </div>
+                <div *ngIf="form.get('id_beneficiaire').errors.idMustBeUnique">
+                  Ce numero doit etre unique
+                </div>
               </div>
             </div>
           </div>
@@ -26,14 +29,27 @@
           <div class="offset-md-1 col-md-7">
             <div class="form-group">
               <label for="username"><strong>Nom d'utilisateur</strong></label>
-              <input formControlName="username" name="username" [(ngModel)]="compte.username" id="username" type="text"
-                class="form-control"/>
+              <input #username formControlName="username" name="username" [(ngModel)]="compte.username" id="username"
+                type="text" class="form-control" />
               <div *ngIf="form.get('username').touched && form.get('username').invalid" class="alert alert-danger">
                 <div *ngIf="form.get('username').errors.required">
                   Le champ username est obligatoire.
                 </div>
+                <div *ngIf="form.get('username').errors.cannotStartWithNumber">
+                  Ce champ Doit commencer par une lettre.
+                </div>
+                <div *ngIf="form.get('username').errors.cannotContainSpace">
+                  Le champ ne doit pas contenir d'espace.
+                </div>
+                <div *ngIf="form.get('username').errors.mustBeUnique">
+                  Ce nom d'utilisateur n'est pas disponible
+                </div>
+                <div *ngIf="form.get('username').errors.pattern">
+                  Ce champ ne peut pas contenir de caractere special.
+                </div>
+
                 <div *ngIf="form.get('username').errors.minlength">
-                  Ce champ doit avoir au moins {{ form.get('username').errors.minlength.requiredLength }} characteres.
+                  Ce champ doit avoir au moins {{ form.get('username').errors.minlength.requiredLength }} caracteres.
                 </div>
               </div>
             </div>
@@ -43,18 +59,28 @@
         <div class="form-group">
           <label for="username"><strong>Prénom</strong></label>
           <input formControlName="firstname" name="firstname" [(ngModel)]="compte.firstname" id="firstname"
-            class="form-control"/>
+            class="form-control" />
           <div *ngIf="form.get('firstname').touched && form.get('firstname').invalid" class="alert alert-danger">
-            Le champ prenom est obligatoire
+            <div *ngIf="form.get('firstname').errors.required">
+              Le champ Prénom est obligatoire.
+            </div>
+            <div *ngIf="form.get('firstname').errors.minlength">
+              Ce champ doit avoir au moins {{ form.get('firstname').errors.minlength.requiredLength }} caracteres.
+            </div>
           </div>
         </div>
 
         <div class="form-group">
           <label for="lastname"><strong>Nom</strong></label>
           <input formControlName="lastname" name="lastname" [(ngModel)]="compte.lastname" id="lastname"
-            class="form-control"/>
+            class="form-control" />
           <div *ngIf="form.get('lastname').touched && form.get('lastname').invalid" class="alert alert-danger">
-            Le champ nom est obligatoire
+            <div *ngIf="form.get('lastname').errors.required">
+              Le champ Nom est obligatoire.
+            </div>
+            <div *ngIf="form.get('lastname').errors.minlength">
+              Ce champ doit avoir au moins {{ form.get('lastname').errors.minlength.requiredLength }} caracteres.
+            </div>
           </div>
         </div>
 
@@ -64,7 +90,7 @@
               <label for="role"><strong>Role</strong></label>
               <select formControlName="role" name="role" [(ngModel)]="compte.role" id="role" class="form-control">
                 <option value=""></option>
-                <option *ngFor="let r of roles" [value]="r.Id">
+                <option *ngFor="let r of roles" [value]="r.name">
                   {{ r.description }}
                 </option>
               </select>
@@ -80,8 +106,8 @@
               <select formControlName="unite" name="unite" [(ngModel)]="compte.unite" (change)="getUnite($event)"
                 id="unite" class="form-control">
                 <option value=""></option>
-                <option *ngFor="let u of unites" [value]="u.Id">
-                  {{ u.name }}
+                <option *ngFor="let u of unites" [value]="u.name">
+                  {{ u.description }}
                 </option>
               </select>
               <div *ngIf="form.get('unite').touched && form.get('unite').invalid" class="alert alert-danger">
@@ -96,16 +122,21 @@
           <input formControlName="forme_par" name="forme_par" [(ngModel)]="compte.forme_par" id="forme_par"
             class="form-control" />
           <div *ngIf="form.get('forme_par').touched && form.get('forme_par').invalid" class="alert alert-danger">
-            Ce champ est obligatoire
+            <div *ngIf="form.get('forme_par').errors.required">
+              Le champ Forme par est obligatoire
+            </div>
+            <div *ngIf="form.get('forme_par').errors.pattern">
+              Ce champ doit etre numerique
+            </div>
           </div>
         </div>
 
-        <div class="form-group" S>
+        <div class="form-group">
           <label for="status"><strong>Statut</strong></label>
           <select formControlName="status" name="status" [(ngModel)]="compte.status" id="status" class="form-control"
-            required>
+            id="status" required>
             <option value=""></option>
-            <option *ngFor="let s of statuts" [value]="s.Id">
+            <option *ngFor="let s of statuts" [value]="s.code">
               {{ s.name }}
             </option>
           </select>

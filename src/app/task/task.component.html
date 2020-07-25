@@ -1,0 +1,87 @@
+<div class="offset-md-2 col-md-8">
+    <div class="card">
+        <div class="card-header">
+            <h1 style="text-align: center; color: white;"><strong>{{ title }}</strong></h1>
+        </div>
+        <div class="card-body">
+            <form #f="ngForm" [formGroup]="form" (ngSubmit)="save()">
+                    <div class="form-group">
+                        <label for="objet"><strong>Objet demande</strong></label>
+                        <select formControlName="objet" name="objet" [(ngModel)]="task.objet" id="objet"
+                            class="form-control" [attr.disabled] = "isDisabled?'':null">
+                            <option value=""></option>
+                            <option *ngFor="let o of objets" [value]="o.name">{{ o.description }}</option>
+                        </select>
+                        <div *ngIf="form.get('objet').touched && form.get('objet').invalid"
+                            class="alert alert-danger">
+                            Le champ Objet est obligatoire 
+                        </div>
+                    </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="assign_to"><strong>Assignée à</strong></label>
+                            <input formControlName="assign_to" name="assign_to" [(ngModel)]="task.assign_to"
+                                id="assign_to" type="text" class="form-control" />
+                            <div *ngIf="form.get('assign_to').touched && form.get('assign_to').invalid"
+                                class="alert alert-danger">
+                                <div *ngIf="form.get('assign_to').errors.required">
+                                    Ce champ est obligatoire
+                                </div>
+                                <div *ngIf="form.get('assign_to').errors.pattern">
+                                    Ce champ doit etre numerique {{ isDisabled }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="offset-md-1 col-md-7">
+                        <div class="form-group">
+                            <label for="deadline"><strong>Echeance</strong></label>
+                            <input #deadline formControlName="deadline" name="deadline" [(ngModel)]="task.deadline"
+                                id="deadline" type="datetime-local" class="form-control" />
+                            <div *ngIf="form.get('deadline').touched && form.get('deadline').invalid"
+                                class="alert alert-danger">
+                                <div *ngIf="form.get('deadline').errors.required">
+                                    Le champ Echeance est obligatoire.
+                                </div>
+                                <div *ngIf="form.get('deadline').errors.mustBePosteriorToToday">
+                                    Cette valeur doit etre posterieure a la date du jour.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="priority"><strong>Priorité</strong></label>
+                    <select formControlName="priority" name="priority" [(ngModel)]="task.priority" id="priority"
+                        class="form-control">
+                        <option value=""></option>
+                        <option *ngFor="let p of priorities" [value]="p.name">{{ p.description }}</option>
+                    </select>
+                    <div *ngIf="form.get('priority').touched && form.get('priority').invalid"
+                        class="alert alert-danger">
+                        <div *ngIf="form.get('priority').errors.required">
+                            Le champ Priorité est obligatoire.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="status"><strong>Statut</strong></label>
+                    <select formControlName="status" name="status" [(ngModel)]="task.status" id="status"
+                        class="form-control" id="status" required disabled>
+                        <option value=""></option>
+                        <option *ngFor="let s of status" [value]="s.code">{{ s.name }}</option>
+                    </select>
+
+                </div>
+
+                <button class="btn btn-primary"><strong>{{ actionButton }}</strong></button>
+            </form>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,56 @@
+<h2>{{ title }}</h2>
+<table class="table table-striped">
+    <thead class="thead-blue">
+        <tr>
+            <th>Assignée à</th>
+            <th>Objet Tache</th>
+            <th>Echéance</th>
+            <th>Priorité</th>
+            <th>Statut Tache</th>
+            <th>Statut Par</th>
+            <th>Cree par</th>
+            <th>Cree le</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of tasks">
+            <td>
+                {{ item.assign_to }}
+            </td>
+            <td>
+                {{ item.type_demande.description }}
+            </td>
+            <td>
+                {{ item.deadline }}
+            </td>
+            <td>
+                {{ item.Priority.description }}
+            </td>
+            <td>
+                {{ item.Status.name }}
+            </td>
+            <td>
+                {{ item.status_by }}
+            </td>
+            <td>
+                {{ item.cree_par }}
+            </td>
+            <td>
+                {{ item.cree_le }}
+            </td>
+            <td>
+                <div class="col">
+                    <div ngbDropdown class="d-inline-block">
+                      <a class="nav-link dropdown-toggle" id="dropdownBasic1" ngbDropdownToggle></a>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <a ngbDropdownItem [routerLink]="['/task/edit', item.Id]">Edit</a>
+                        <button ngbDropdownItem (click)="completer(item.Id)">Completer</button>
+                        <button ngbDropdownItem (click)="annuler(item.Id)">Annuler</button>
+                      </div>
+                    </div>
+                  </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

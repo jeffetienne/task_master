@@ -21,13 +21,22 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { CreationCompteComponent } from './creation-compte/creation-compte.component';
 import { CompteListComponent } from './compte-list/compte-list.component';
+import { UsernameValidators } from './creation-compte/username.validators';
+import { MustBeUnique } from './creation-compte/asyncUsername.validators';
+import { IdMustBeUnique } from './creation-compte/asyncBeneficiaire.validators';
+import { TaskComponent } from './task/task.component';
+import { TaskListComponent } from './task-list/task-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     CreationCompteComponent,
-    CompteListComponent
+    MustBeUnique,
+    IdMustBeUnique,
+    CompteListComponent,
+    TaskComponent,
+    TaskListComponent
   ],
   imports: [
     FormsModule,
@@ -64,10 +73,30 @@ import { CompteListComponent } from './compte-list/compte-list.component';
       {
         path: 'compte/edit/:id',
         component: CreationCompteComponent
+      },
+      {
+        path: 'compte/edit/:id/:action',
+        component: CreationCompteComponent
+      },
+      {
+        path: 'task/create/:demande/:objet',
+        component: TaskComponent
+      },
+      {
+        path: 'task/edit/:id',
+        component: TaskComponent
+      },
+      {
+        path: 'task/edit/:id/:action',
+        component: TaskComponent
+      },
+      {
+        path: 'task/list',
+        component: TaskListComponent
       }
     ])
   ],
-  providers: [],
+  providers: [UsernameValidators, MustBeUnique, IdMustBeUnique],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

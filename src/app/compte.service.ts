@@ -17,6 +17,24 @@ export class CompteService {
     return this.http.get(Constants.server + ':' + Constants.port + this.url + '/' + id);
   }
 
+  getCompteByUsername(username: string) {
+    let headerOptions: Headers 
+    headerOptions = new Headers({ 'Content-type': 'application/json' });
+    let requestOptions: RequestOptions 
+    requestOptions = new RequestOptions({method: RequestMethod.Post, headers: headerOptions});
+    
+    return this.http.get(Constants.server + ':' + Constants.port + this.url + '/0/' + username);
+  }
+
+  getCompteByCode(beneficiaire: number) {
+    let headerOptions: Headers 
+    headerOptions = new Headers({ 'Content-type': 'application/json' });
+    let requestOptions: RequestOptions 
+    requestOptions = new RequestOptions({method: RequestMethod.Post, headers: headerOptions});
+    
+    return this.http.get(Constants.server + ':' + Constants.port + this.url + '/' + beneficiaire + '/a');
+  }
+
   url = '/api/creation_comptes'
   constructor(private http: Http) { }
 

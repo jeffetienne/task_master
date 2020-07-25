@@ -10,13 +10,14 @@
             <th>Role</th>
             <th>Unite</th>
             <th>Forme par</th>
+            <th>Statut Demande</th>
             <th>Cree par</th>
             <th>Cree le</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let item of comptesToDisplay">
+        <tr *ngFor="let item of comptes">
             <td>
                 {{ item.demandeur }}
             </td>
@@ -33,13 +34,16 @@
                 {{ item.lastname }}
             </td>
             <td>
-                {{ item.role_ref.description }}
+                {{ item.Role.description }}
             </td>
             <td>
-                {{ item.unite_ref.name }}
+                {{ item.Unite.description }}
             </td>
             <td>
                 {{ item.forme_par }}
+            </td>
+            <td>
+                {{ item.Status.name }}
             </td>
             <td>
                 {{ item.cree_par }}
@@ -54,9 +58,9 @@
                       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                         <a ngbDropdownItem [routerLink]="['/compte/edit', item.Id]">Edit</a>
                         <button ngbDropdownItem (click)="delete(item.Id)">Delete</button>
-                        <button ngbDropdownItem>Approuver</button>
-                        <button ngbDropdownItem>Annuler</button>
-                        <button ngbDropdownItem>Rejeter</button>
+                        <button ngbDropdownItem [routerLink]="['/compte/edit', item.Id, 'approuver']">Approuver</button>
+                        <button ngbDropdownItem (click)="annuler(item.Id)">Annuler</button>
+                        <button ngbDropdownItem (click)="rejeter(item.Id)">Rejeter</button>
                       </div>
                     </div>
                   </div>

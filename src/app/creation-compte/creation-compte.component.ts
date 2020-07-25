@@ -12,6 +12,9 @@ import { StatusService } from '../status.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LogModificationService } from '../log-modification.service';
 import { LogModification } from '../model/LogModification';
+import { UsernameValidators } from './username.validators';
+import { mustBeUnique } from './asyncUsername.validators';
+import { idMustBeUnique } from './asyncBeneficiaire.validators';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -30,17 +33,29 @@ export class CreationCompteComponent implements OnInit {
   form = new FormGroup({
     id_beneficiaire: new FormControl('', [
       Validators.required,
-      Validators.pattern("^[1-9]*$")
-    ]),
+      Validators.pattern("^[0-9]*$")
+    ], idMustBeUnique(this.compteService)),
     username: new FormControl('', [
       Validators.required,
-      Validators.minLength(4)
+      Validators.minLength(3),
+      Validators.pattern("^(?=.*[a-zA-Z])[a-zA-Z0-9]+$"),
+      UsernameValidators.cannotContainSpace,
+      UsernameValidators.cannotStartWithNumber
+    ], mustBeUnique(this.compteService)),
+    firstname: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3)
     ]),
-    firstname: new FormControl('', Validators.required),
-    lastname: new FormControl('', Validators.required),
+    lastname: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3)
+    ]),
     role: new FormControl('', Validators.required),
     unite: new FormControl('', Validators.required),
-    forme_par: new FormControl('', Validators.required),
+    forme_par: new FormControl('', [
+      Validators.required,
+      Validators.pattern("^[0-9]*$")
+    ]),
     status: new FormControl('', Validators.required)
   });
 
@@ -56,6 +71,7 @@ export class CreationCompteComponent implements OnInit {
   title: string;
   textButton: string;
   id: number;
+  action: string;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -65,7 +81,7 @@ export class CreationCompteComponent implements OnInit {
     private statusService: StatusService,
     private logModificationService: LogModificationService) {
 
-    this.compte.status = 8;
+    this.compte.status = 'cre';
     roleService.getRoles().subscribe(response => {
       this.roles = response.json();
     });
@@ -82,11 +98,17 @@ export class CreationCompteComponent implements OnInit {
     this.textButton = 'Sauvegarder'
 
     this.id = +this.route.snapshot.paramMap.get('id');
+    this.action = this.route.snapshot.paramMap.get('action');
     if (this.id) this.compteService
       .getCompte(this.id)
       .subscribe(response => {
         this.title = 'Modifier cette demande'
         this.textButton = "Modifier"
+        if(this.action){
+          if(this.action === 'approuver')
+          this.title = 'Approuver cette demande'
+          this.textButton = "Approuver"
+        }
         this.compte = response.json();
         this.compteInDb = response.json();
       });
@@ -100,9 +122,26 @@ export class CreationCompteComponent implements OnInit {
       this.compte.Id = +this.id;
       this.compte.modifie_par = 'concepteur';
       this.compte.modifie_le = new Date();
+
+      if (this.action) {
+        if (this.action === 'approuver') {
+          this.compte.status = 'apv';
+          this.compte.status_by = 2218;
+          this.compte.status_date = new Date();
+          this.compte.status_reason = 'good';
+        }
+      }
+
       this.compteService.update(+this.id, this.compte)
         .subscribe(response => {
-          console.log(response);
+          if (this.action) {
+            if (this.action === 'approuver') {
+              this.router.navigate(['/task/create', this.id, 'compte']);
+            }
+          }
+          //this.router.navigate(['/compte/list']);
+        }, err => {
+          console.log(err);
         });
 
       if (this.compte.id_beneficiaire !== this.compteInDb.id_beneficiaire
@@ -111,14 +150,17 @@ export class CreationCompteComponent implements OnInit {
         || this.compte.lastname !== this.compteInDb.lastname
         || this.compte.role !== this.compteInDb.role
         || this.compte.unite !== this.compteInDb.unite
-        || this.compte.forme_par !== this.compteInDb.forme_par) {
+        || this.compte.forme_par !== this.compteInDb.forme_par
+        || this.compte.status !== this.compteInDb.status) {
 
         let log: LogModification = new LogModification();
         log.table_modifiee = 'creation_compte';
         log.modifie_par = this.compte.modifie_par;
         log.modifie_le = this.compte.modifie_le;
+        log.ligne_modifiee = this.compte.Id;
 
         if (this.compte.id_beneficiaire !== this.compteInDb.id_beneficiaire) {
+
           log.ancienne_valeur = this.compteInDb.id_beneficiaire.toString();
           log.nouvelle_valeur = this.compte.id_beneficiaire.toString();
           log.champ_modifie = 'id_beneficiaire';
@@ -187,62 +229,17 @@ export class CreationCompteComponent implements OnInit {
               console.log(response);
             });
         }
-        /*
-        this.logModificationService.create(log)
-        .subscribe(response => {
-          console.log(response);
-        });//*/
-      }
-      /*
-    let compteInDb: Compte;
 
-    this.compteService.getCompte(this.id)
-      .subscribe(response => {
-        compteInDb = response.json();
-        if (this.compte.beneficiaire !== this.compteInDb.beneficiaire
-          || compte.username !== compteInDb.username
-          || compte.firstname !== compteInDb.firstname
-          || compte.lastname !== compteInDb.lastname
-          || compte.role !== compteInDb.role
-          || compte.unite !== compteInDb.unite
-          || compte.forme_par !== compteInDb.forme_par) {
-
-          let log: LogModification = new LogModification();
-          log.table_modifiee = 'creation_compte';
-          log.ancienne_valeur = compteInDb.beneficiaire.toString();
-          log.nouvelle_valeur = compte.beneficiaire.toString();
-          log.modifie_par = compte.modifie_par;
-          log.modifie_le = compte.modifie_le;
-
-          if (compte.beneficiaire !== compteInDb.beneficiaire) {
-            log.champ_modifie = 'id_beneficiaire';
-          }
-
-          if (compte.username !== compteInDb.username) {
-            log.champ_modifie = 'username';
-          }
-
-          if (compte.firstname !== compteInDb.firstname) {
-            log.champ_modifie = 'firstname';
-          }
-
-          if (compte.lastname !== compteInDb.lastname) {
-            log.champ_modifie = 'lastname';
-          }
-
-          if (compte.role !== compteInDb.role) {
-            log.champ_modifie = 'role';
-          }
-
-          if (compte.unite !== compteInDb.unite) {
-            log.champ_modifie = 'unite';
-          }
-
-          if (compte.forme_par !== compteInDb.forme_par) {
-            log.champ_modifie = 'forme_par';
-          }         
+        if (this.compte.status !== this.compteInDb.status) {
+          log.ancienne_valeur = this.compteInDb.status;
+          log.nouvelle_valeur = this.compte.status;
+          log.champ_modifie = 'status';
+          this.logModificationService.create(log)
+            .subscribe(response => {
+              console.log(response);
+            });
         }
-      });//*/
+      }
     }
     else {
       this.compte.demandeur = 2016;
@@ -254,10 +251,13 @@ export class CreationCompteComponent implements OnInit {
 
       this.compteService.create(this.compte)
         .subscribe(response => {
-          console.log(response);
+          this.router.navigate(['/compte/list']);
+        }, err => {
+          console.log(err);
         });
+        
     }
-    this.router.navigate(['/compte/list']);
+    
   }
 
   getUnite($event) {

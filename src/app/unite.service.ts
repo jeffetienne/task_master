@@ -14,7 +14,7 @@ export class UniteService {
     return this.http.get(Constants.server + ':' + Constants.port + this.url);
   }
 
-  getUnite(id: number){
-    return this.http.get(Constants.server + ':' + Constants.port + this.url + '/' + id);
+  getUnite(name: string){
+    return this.http.get(Constants.server + ':' + Constants.port + this.url + '/' + name);
   }
 }
