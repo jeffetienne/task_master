@@ -26,6 +26,7 @@ import { MustBeUnique } from './creation-compte/asyncUsername.validators';
 import { IdMustBeUnique } from './creation-compte/asyncBeneficiaire.validators';
 import { TaskComponent } from './task/task.component';
 import { TaskListComponent } from './task-list/task-list.component';
+import { AjoutModuleComponent } from './ajout-module/ajout-module.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { TaskListComponent } from './task-list/task-list.component';
     IdMustBeUnique,
     CompteListComponent,
     TaskComponent,
-    TaskListComponent
+    TaskListComponent,
+    AjoutModuleComponent
   ],
   imports: [
     FormsModule,
@@ -93,6 +95,10 @@ import { TaskListComponent } from './task-list/task-list.component';
       {
         path: 'task/list',
         component: TaskListComponent
+      },
+      {
+        path: 'module/create',
+        component: AjoutModuleComponent
       }
     ])
   ],

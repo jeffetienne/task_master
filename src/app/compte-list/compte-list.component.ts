@@ -41,23 +41,33 @@ export class CompteListComponent implements OnInit {
   }
 
   delete(id: number) {
-    if (!confirm('Voulez-vous vraiment supprimer cette demande?')) return;
-
     if (id) {
       this.compteService.getCompte(id)
         .subscribe(response => {
           this.compte = response.json();
           if (this.compte) {
-            this.compte.supprime = 1;
-            this.compte.supprime_le = new Date();
-            this.compte.supprime_par = 'concepteur';
-            this.compte.supprime_raison = prompt('Prière de saisir la raison!!!');
-            this.compteService.update(id, this.compte)
-              .subscribe(response => {
-                this.insert_log('supprime', this.compte.supprime.toString(), '1');
-              }, error => {
-                console.log(error);
-              });
+            if (this.compte.status === 'cre'
+              || this.compte.status === 'ann'
+              || this.compte.status === 'rej') {
+
+              if (!confirm('Voulez-vous vraiment supprimer cette demande?')) return;
+
+              this.compte.supprime = 1;
+              this.compte.supprime_le = new Date();
+              this.compte.supprime_par = 'concepteur';
+              this.compte.supprime_raison = prompt('Prière de saisir la raison!!!');
+              this.compteService.update(id, this.compte)
+                .subscribe(response => {
+                  this.insert_log('supprime', this.compte.supprime.toString(), '1');
+                }, error => {
+                  console.log(error);
+                });
+            } else {
+              if (this.compte.status === 'apv') {
+                alert('Vous ne pouvez pas supprimer cette demande. Car elle a été approuvée par ' + this.compte.status_by + ' le ' + this.compte.status_date);
+              }
+            }
+
           }
         })
 
@@ -65,28 +75,34 @@ export class CompteListComponent implements OnInit {
   }
 
   annuler(id: number) {
-    if (!confirm('Voulez-vous vraiment annulere cette demande?')) return;
-
     if (id) {
       this.compteService.getCompte(id)
         .subscribe(response => {
           this.compte = response.json();
           if (this.compte) {
-            let status_log = this.compte.status;
-            let date_log = this.compte.status_date;
-            let reason_log = this.compte.status_reason;
-            
-            this.compte.status = 'ann';
-            this.compte.status_date = new Date();
-            this.compte.status_by = 2218;
-            this.compte.status_reason = prompt('Prière de saisir la raison!!!');
-            this.compteService.update(id, this.compte)
-              .subscribe(response => {
-                this.insert_log('status', status_log, this.compte.status);
-                this.insert_log('status_by', this.compte.status_by, '2218');
-                this.insert_log('status_date', date_log, this.compte.status_date);
-                this.insert_log('status_reason', reason_log, this.compte.status_reason);
-              });
+            if (this.compte.status === 'cre') {
+              if (!confirm('Voulez-vous vraiment annuler cette demande?')) return;
+
+              let status_log = this.compte.status;
+              let date_log = this.compte.status_date;
+              let reason_log = this.compte.status_reason;
+
+              this.compte.status = 'ann';
+              this.compte.status_date = new Date();
+              this.compte.status_by = 2218;
+              this.compte.status_reason = prompt('Prière de saisir la raison!!!');
+              this.compteService.update(id, this.compte)
+                .subscribe(response => {
+                  this.insert_log('status', status_log, this.compte.status);
+                  this.insert_log('status_by', this.compte.status_by, '2218');
+                  this.insert_log('status_date', date_log, this.compte.status_date);
+                  this.insert_log('status_reason', reason_log, this.compte.status_reason);
+                });
+            } else {
+              alert('Vous ne pouvez pas annuler cette demande. Car elle a été '
+                + this.compte.Status.name + 'e par ' + this.compte.status_by
+                + ' le ' + this.compte.status_date);
+            }
           }
         })
 
@@ -94,28 +110,34 @@ export class CompteListComponent implements OnInit {
   }
 
   rejeter(id: number) {
-    if (!confirm('Voulez-vous vraiment rejeter cette demande?')) return;
-
     if (id) {
       this.compteService.getCompte(id)
         .subscribe(response => {
           this.compte = response.json();
           if (this.compte) {
-            let status_log = this.compte.status;
-            let date_log = this.compte.status_date;
-            let reason_log = this.compte.status_reason;
-            
-            this.compte.status = 'rej';
-            this.compte.status_date = new Date();
-            this.compte.status_by = 2218;
-            this.compte.status_reason = prompt('Prière de saisir la raison!!!');
-            this.compteService.update(id, this.compte)
-              .subscribe(response => {
-                this.insert_log('status', status_log, this.compte.status);
-                this.insert_log('status_by', this.compte.status_by, '2218');
-                this.insert_log('status_date', date_log, this.compte.status_date);
-                this.insert_log('status_reason', reason_log, this.compte.status_reason);
-              });
+            if (this.compte.status === 'cre') {
+              if (!confirm('Voulez-vous vraiment rejeter cette demande?')) return;
+
+              let status_log = this.compte.status;
+              let date_log = this.compte.status_date;
+              let reason_log = this.compte.status_reason;
+
+              this.compte.status = 'rej';
+              this.compte.status_date = new Date();
+              this.compte.status_by = 2218;
+              this.compte.status_reason = prompt('Prière de saisir la raison!!!');
+              this.compteService.update(id, this.compte)
+                .subscribe(response => {
+                  this.insert_log('status', status_log, this.compte.status);
+                  this.insert_log('status_by', this.compte.status_by, '2218');
+                  this.insert_log('status_date', date_log, this.compte.status_date);
+                  this.insert_log('status_reason', reason_log, this.compte.status_reason);
+                });
+            } else {
+              alert('Vous ne pouvez pas rejeter cette demande. Car elle a été '
+                + this.compte.Status.name + 'e par ' + this.compte.status_by
+                + ' le ' + this.compte.status_date);
+            }
           }
         })
 
